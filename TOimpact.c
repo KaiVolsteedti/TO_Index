@@ -29,8 +29,18 @@ int main ()
         scanf("%d", &score_result);
     }
 
-    //getting yards impact and tagging if TO was in redzone
-    float yard_impact = 1/(.1*pow(yards,.5));
+    float yard_impact;
+    //getting yards impact, first 30 is penlized more than the 31+ yardage
+    if (yards >= 31)
+    {
+       yard_impact = ((100-yards)/(pow(yards,.5)))+1; 
+    }
+    else if (yards <= 30)
+    {
+    yard_impact = -0.5*yards +30;
+    }
+
+    //tagging if TO was in redzone
     if (yards >= 80)
     {
         printf("Yes");
@@ -235,16 +245,30 @@ int main ()
     {
         score_impact += 1.0;
     }
-    
-    printf("\nTime importance: %.2f",time_importance); 
-    printf("\nScore impact: %.2f", score_impact);
-    printf("\nYard impact:%.2f ", yard_impact);
-    printf("\nRedzone impact: %.2f",redzone_impact);
-    printf("\nReturn importance: %.2f",return_score_importance);
-    printf("\nDown importance: %.2f",down_importance);
 
-    float TO_index = time_importance+score_impact+yard_impact+redzone_impact+return_score_importance+down_importance;
-    printf("\n-------------------------\nYour To Index is:%.2f", TO_index);
+    //if the ball is turned over but the opp. team doesnt score and your still winning, add a "reward"
+    if (return_score_importance ==1.0 && (score_diff > 0 && score_diff<3 ))    //tied to 2 point lead
+    {
+        return_score_importance = -1.0;
+    }
+    else if (return_score_importance == 1.0 && (score_diff >= 3 && score_diff <=8)) //winnning by 3 to 8
+    {
+        return_score_importance = -2.0;
+    }
+    else if (return_score_importance == 1.0 && score_diff > 8) //winning by 2 scores
+    {
+        return_score_importance = -3.0;
+    }
+    
+    printf("\nTime impact: %.2f",time_importance); 
+    printf("\nScore impact: %.2f", score_impact);
+    printf("\nReturn impact: %.2f",return_score_importance);
+    printf("\nYard impact: %.2f ", yard_impact);
+    printf("\nRedzone impact: %.2f",redzone_impact);
+    printf("\nDown impact: %.2f",down_importance);
+
+    float TO_index = time_importance+score_impact*return_score_importance+yard_impact+redzone_impact+down_importance;
+    printf("\n-------------------------\nYour To Index is: %.2f", TO_index);
 
 
 
