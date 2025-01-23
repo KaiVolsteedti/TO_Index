@@ -7,7 +7,7 @@
 
 int main ()
 {
-    int quater,score,opp_score,down,distance,return6_temp,score_after_temp, redzone_temp, score_result, yards;
+    int quater,score,opp_score,down,distance,return6_temp,score_after_temp, score_result, yards;
     bool return6,redzone,score_after;
     float time_in_quater;
     printf("Welcome to the Turnover index! Please enter all the info below.\n");
@@ -19,7 +19,7 @@ int main ()
     scanf("%d %d", &score,&opp_score);
     printf("Enter down and distance: ");
     scanf("%d %d", &down, &distance);
-    printf("Where on the field did the turnover occur (In reference to the opp. endzone)?");
+    printf("Where on the field did the turnover occur (In reference to the team's endzone ie.redzone would be 80+)?");
     scanf("%d", &yards);
     printf("Was the TO a returned for points or did they score on that drive?(Enter 1 or 0 for both) ");
     scanf("%d %d", &return6_temp, &score_after_temp);
@@ -28,29 +28,38 @@ int main ()
         printf("Did they score a touchdown (1) or field goal(0)? ");
         scanf("%d", &score_result);
     }
-    printf("Did the TO happend in the redzone or thrown into the redzone?(Enter 1 or 0) ");
-    scanf("%d", &redzone_temp);
 
-    float yard_impact = 1/(.1*pow(yards,1/2))*10;
-    printf("Yard impact:", yard_impact);
+    //getting yards impact and tagging if TO was in redzone
+    float yard_impact = 1/(.1*pow(yards,.5));
+    if (yards >= 80)
+    {
+        printf("Yes");
+        redzone = 1;
+    }
+    else
+    {
+        printf("No");
+        redzone = 0;
+    }
 
     //getting score differences
     int score_diff = score - opp_score;
     //if score is greater than 10, treat as the same
     if (score_diff >= 10)
     {
-        score_diff = 7;
+        score_diff = 10;
     }
     //same as above but in the oppisite way
     else if (score_diff <= -10)
     {
-        score_diff = -7;
+        score_diff = -10;
     }
 
     //assigning booleans values
     return6 = (return6_temp==1);
     score_after = (score_after_temp==1);
-    redzone = (redzone_temp==1);
+
+  
 
     float score_impact;
     float return_score_importance;
@@ -125,7 +134,7 @@ int main ()
 
     //total time used as multipler since its a natural scale
     float time_remianing = 60-((60.00-quater*15) + time_in_quater);
-    float time_importance = (time_remianing)+1;        
+    float time_importance = time_remianing;        
     float down_importance;
 
     //if distance is greater than 10 yards
@@ -206,7 +215,7 @@ int main ()
             redzone_impact +=1.5;
         }
     }
-    else 
+    else if (redzone == 0)
     {
         redzone_impact = 1.0;
     }
@@ -218,22 +227,23 @@ int main ()
         score_impact += 5.0;
         
     }
-    else if ((score_diff <= 7 && score_diff >= 0) && score_after == 1)
+    else if ((score_diff <= 7 && score_diff >= 0) && score_result == 1)
     {
         score_impact += 3.0;
     }
-    else if ((score_diff <= 7 && score_diff >= 0) && score_after == 0)
+    else if ((score_diff <= 7 && score_diff >= 0) && score_result == 0)
     {
         score_impact += 1.0;
     }
     
     printf("\nTime importance: %.2f",time_importance); 
-    printf("\nScore impact: %.2f", score_impact); 
+    printf("\nScore impact: %.2f", score_impact);
+    printf("\nYard impact:%.2f ", yard_impact);
     printf("\nRedzone impact: %.2f",redzone_impact);
     printf("\nReturn importance: %.2f",return_score_importance);
     printf("\nDown importance: %.2f",down_importance);
 
-    float TO_index = time_importance*score_impact*redzone_impact*return_score_importance+down_importance;
+    float TO_index = time_importance+score_impact+yard_impact+redzone_impact+return_score_importance+down_importance;
     printf("\n-------------------------\nYour To Index is:%.2f", TO_index);
 
 
