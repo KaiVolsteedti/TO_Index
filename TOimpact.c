@@ -43,12 +43,10 @@ int main ()
     //tagging if TO was in redzone
     if (yards >= 80)
     {
-        printf("Yes");
         redzone = 1;
     }
     else
     {
-        printf("No");
         redzone = 0;
     }
 
@@ -230,7 +228,6 @@ int main ()
         redzone_impact = 1.0;
     }
 
-
     //Scoring after the turnover (adding score impact based on outcome)
     if ((score_diff <= 7 && score_diff >= 0) && return6 == 1)
     {
@@ -269,8 +266,6 @@ int main ()
 
     float TO_index = time_importance+score_impact*return_score_importance+yard_impact+redzone_impact+down_importance;
     printf("\n-------------------------\nYour To Index is: %.2f", TO_index);
-
-
 
     return 0;
 }
