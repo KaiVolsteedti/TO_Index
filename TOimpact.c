@@ -99,7 +99,7 @@ int main ()
         score_impact = 1.2;
         break;
         case 8:
-        score_impact = 1.2;
+        score_impact = 1.2;         //review
         break;
         case 9:
         score_impact = 1.0;
@@ -263,6 +263,7 @@ int main ()
     printf("\nYard impact: %.2f ", yard_impact);
     printf("\nRedzone impact: %.2f",redzone_impact);
     printf("\nDown impact: %.2f",down_importance);
+
 
     float TO_index = time_importance+score_impact*return_score_importance+yard_impact+redzone_impact+down_importance;
     printf("\n-------------------------\nYour To Index is: %.2f", TO_index);
