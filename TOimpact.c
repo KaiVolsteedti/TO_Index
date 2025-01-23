@@ -2,20 +2,25 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <math.h>
 
 
 int main ()
 {
-    int quater,score,opp_score,down,distance,return6_temp,score_after_temp, redzone_temp, score_result;
+    int quater,score,opp_score,down,distance,return6_temp,score_after_temp, redzone_temp, score_result, yards;
     bool return6,redzone,score_after;
     float time_in_quater;
     printf("Welcome to the Turnover index! Please enter all the info below.\n");
     printf("Enter quater: ");
     scanf("%d", &quater);
+    printf("Enter the time(Enter as a decimal):");
+    scanf("%f", &time_in_quater);
     printf("Enter score and opp. score: ");
     scanf("%d %d", &score,&opp_score);
     printf("Enter down and distance: ");
     scanf("%d %d", &down, &distance);
+    printf("Where on the field did the turnover occur (In reference to the opp. endzone)?");
+    scanf("%d", &yards);
     printf("Was the TO a returned for points or did they score on that drive?(Enter 1 or 0 for both) ");
     scanf("%d %d", &return6_temp, &score_after_temp);
     if (score_after_temp == 1)
@@ -25,8 +30,9 @@ int main ()
     }
     printf("Did the TO happend in the redzone or thrown into the redzone?(Enter 1 or 0) ");
     scanf("%d", &redzone_temp);
-    printf("Enter the time(Enter as a decimal):");
-    scanf("%f", &time_in_quater);
+
+    float yard_impact = 1/(.1*pow(yards,1/2))*10;
+    printf("Yard impact:", yard_impact);
 
     //getting score differences
     int score_diff = score - opp_score;
